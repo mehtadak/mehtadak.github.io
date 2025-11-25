@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Design Patterns - Detail</title>
+    
+    <!-- Google Fonts: JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Linked Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="wrapper">
+    
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+
+    <header>
+        <div class="header-meta">
+            <h1>Agentic Design Patterns Implementation</h1>
+            <p>Project: MSU AI Agents Coursework (Fall 2025)</p>
+            <div class="meta-tags">
+                <span>Python</span>
+                <span>LLM</span>
+                <span>Agents</span>
+                <span>Prompt Engineering</span>
+                <span>Design Patterns</span>
+            </div>
+        </div>
+
+        <div class="header-bio">
+            <span class="section-label">Overview</span>
+            <p>
+                This coursework involved designing and implementing an autonomous AI Agent capable of multi-step reasoning and tool-use. The primary goal was to move beyond simple prompt-response interactions by structuring the agent's internal process using established **Agentic Design Patterns** to enhance reliability and capability.
+            </p>
+            <p>
+                The implemented agent was required to interact with a defined external environment and utilize a set of predefined tools to solve complex, novel problems that required dynamic planning.
+            </p>
+        </div>
+    </header>
+
+    <div class="content-section">
+        
+        <div class="flex-section">
+            <div class="text-content">
+                <h2>Programming Deep Dive: ReAct Pattern</h2>
+                <p>
+                    The agent was constructed utilizing the **ReAct (Reasoning and Acting)** pattern. This involves forcing the Large Language Model (LLM) to interleave its **Thought (Reasoning)** process with its **Action (Tool Use)**.
+                </p>
+                <p>
+                    This approach dramatically improves the agent's ability to plan and self-correct compared to simple Chain-of-Thought. The prompt structure explicitly requested the LLM to output a sequence of `Thought` and `Action(tool_call)` blocks, which were then parsed by the custom agent framework to execute the tool before feeding the observation back into the next prompt iteration. 
+                </p>
+                <p>
+                    The agent components implemented were: the **Planner** (the LLM itself), **Memory** (for storing conversation and past observations), and the **Tool Kit** (a collection of functions the agent could call, such as a code execution sandbox or external API query).
+                </p>
+            </div>
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="https://placehold.co/600x350/a7f3d0/047857?text=ReAct+Workflow+Diagram" alt="Diagram showing the loop of Thought, Action, and Observation in the ReAct pattern.">
+                    <div class="caption">Figure 1: The core ReAct loop, demonstrating iterative planning and execution.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-section reverse">
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="https://placehold.co/600x350/fecaca/991b1b?text=Structured+Tool+Use" alt="Screenshot of structured JSON output for a tool call.">
+                    <div class="caption">Figure 2: Example of structured tool-call output from the LLM, ensuring reliability.</div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h2>Problem Solving: Reliable Tool Parsing</h2>
+
+                <p>
+                    A critical challenge in developing tool-using agents is ensuring the LLM's output for tool calls is reliably parsable by the Python execution environment. An unstructured text output can lead to constant parsing errors (often termed 'tool hallucination' or 'malformed output').
+                </p>
+
+                <h3>Solution: JSON Structured Output and Guardrails</h3>
+                <p>
+                    To enforce strict tool call syntax, the prompt was heavily engineered to request a specific **JSON format** for all actions. If the LLM deviated from this JSON schema, a "Reflect" step was introduced:
+                </p>
+                <ol>
+                    <li>If parsing failed, the system generated an `Observation` stating the tool call was malformed.</li>
+                    <li>This observation was fed back to the LLM, prompting it to **reflect** on the error and correct the JSON structure in the subsequent turn.</li>
+                </ol>
+                <p>This closed-loop feedback mechanism significantly increased the agent's reliability, achieving over 95% successful tool execution rate in complex, multi-step problem environments.</p>
+            </div>
+        </div>
+
+        <h2>Result and Impact</h2>
+        <p>
+            The final agent successfully navigated environments requiring sequential use of multiple tools and demonstrated strong zero-shot planning capabilities. This project provided deep practical experience in prompt engineering, managing complex state and memory, and building robust, production-ready AI agent systems, which are key to next-generation software development.
+        </p>
+
+    </div>
+
+    <footer>
+        <div>v2.0.0<br>Last updated 2025</div>
+        <div class="footer-links">
+            <a href="https://mehtadak.github.io/resume.pdf" target="_blank">Resume ↗</a>
+            <a href="https://github.com/mehtadak" target="_blank">GitHub ↗</a>
+            <a href="https://linkedin.com/in/mehtadak" target="_blank">LinkedIn ↗</a>
+            <a href="mailto:mehtadak@msu.edu">Email ↗</a>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

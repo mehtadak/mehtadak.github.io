@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building State System - Detail</title>
+    
+    <!-- Google Fonts: JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Linked Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="wrapper">
+    
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+
+    <header>
+        <div class="header-meta">
+            <h1>VFX Manager & Interactables System</h1>
+            <p>Game - <a href="https://cookieinferno.itch.io/project-promotion" class="header-bio a">Project Promotion ↗</a> (2025)</p>
+            <div class="meta-tags">
+                <span>Unity</span>
+                <span>C#</span>
+                <span>State Machines</span>
+                <span>Gameplay Systems & Managers</span>
+            </div>
+        </div>
+
+        <div class="header-bio">
+            <span class="section-label">Overview</span>
+            <p>
+                Manage all the VFX in the game, all logic was implemented using a <code>singleton</code> script and event-driven state changes, ensuring modularity and clean architecture. 
+            </p>
+            <p>
+                This system manages all the interactable objects within the world — <strong>Interaction → Do Something → Update Other Systems</strong> — and integrates with the larger game systems.                
+            </p>
+        </div>
+    </header>
+
+    <div class="content-section">
+        
+        <div class="flex-section">
+
+            <div class="text-content">
+                <h2>VFX Manager</h2>
+
+                <p>
+                    Any combat, interaction or ability use triggers the VFX manager which uses a <strong>Singleton</strong> pattern to be called from any script in the game. This also ensures that only a single instance of the manager exists in the game to avoid duplicate calls. 
+                </p>
+
+                <h3>VFX Prefab Management</h3>
+                <p>
+                    Built a dictionary to load to correct VFX prefab for a given call. All the prefabs have a name assigned that can be passed as a variable when calling the function to play VFX.
+                </p>
+
+                <h3>Designer Tools</h3>
+                <p>
+                    Exposed the offset of individual VFX assets to help the designers fine tune the placement of the VFX. 
+                </p>
+            </div>
+            <!-- IMAGE CONTAINER REPLACED WITH CODE BLOCK -->
+            <div class="image-gallery">
+                <div class="image-container">
+    <pre class="code-snippet"><code>
+// Placeholder snippet
+void TriggerDetonation() {
+    if (state == BuildingState.Condemned) {
+        state = BuildingState.Demolished;
+        SpawnDebris();
+    }
+}
+    </code></pre>
+                    <div class="caption">Figure 1: Building the VFX Asset Dictionary</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-section reverse">
+            
+            <!-- SECOND CODE BLOCK -->
+            <div class="image-gallery">
+                <div class="image-container">
+                    <pre class="code-snippet"><code>
+// Placeholder snippet
+void TriggerDetonation() {
+    if (state == BuildingState.Condemned) {
+        state = BuildingState.Demolished;
+        SpawnDebris();
+    }
+}
+                    </code></pre>
+                    <div class="caption">Figure 2: Example of detonator-triggered state change logic.</div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h2>Interactable System</h2>
+                <p>
+                    Any interaction with static objects, environments and/or sometimes players are processed here.
+                </p>
+                <p>
+                    All interactions are triggered through interact button in the action box. Game data is captured and relevant interaction script is called to perform interaction.
+                </p>
+            </div>            
+        </div>
+
+        <h2>Result and Impact</h2>
+        <p>
+            * This modular VFX system created a clean and easy way to manage VFX that allowed players to get dynamic visual feedback on inputs. Also helped designers to quickly change assets for prototyping<br>
+            * Interactables increased player engagement by allowing them to engage with things other than enemies.
+        </p>
+
+    </div>
+
+    <footer>
+        <div>v1.0.0<br>Last updated 2025</div>
+        <div class="footer-links">
+            <a href="https://mehtadak.github.io/resume.pdf" target="_blank">Resume ↗</a>
+            <a href="https://github.com/mehtadak" target="_blank">GitHub ↗</a>
+            <a href="https://linkedin.com/in/mehtadak" target="_blank">LinkedIn ↗</a>
+            <a href="mailto:mehtadak@msu.edu">Email ↗</a>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursive Ray Tracer Implementation</title>
+    
+    <!-- Google Fonts: JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Linked Stylesheet (for theme and core styling) -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="wrapper">
+    
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left mr-2"></i> Back to Projects</a>
+
+    <header>
+        <div class="header-meta">
+            <h1>Recursive Ray Tracer (C++)</h1>
+            <p>Project: High-Performance Renderer Architecture and Core Ray Tracing Loop</p>
+            <div class="meta-tags">
+                <span>C++</span>
+                <span>Graphics</span>
+                <span>Ray Tracing</span>
+                <span>Scene Graph</span>
+                <span>Architecture</span>
+            </div>
+        </div>
+
+        <div class="header-bio mt-6">
+            <span class="section-label">Overview & Accomplishment</span>
+            <p>
+                This project involved creating the foundational architecture for a recursive ray tracing renderer in C++. The core accomplishment was implementing a decoupled rendering pipeline by using an abstract renderer base class and a custom Scene Graph. This allowed the system to switch seamlessly between a fast OpenGL rendering preview and the custom Ray Tracing calculation kernel.
+            </p>
+            <p class="mt-2">
+                The technical focus was on calculating the correct camera rays, managing polygon transformations from local to world space, and integrating with a specialized intersection engine to find the nearest hit point, forming the basis for lighting, shadows, and reflections.
+            </p>
+        </div>
+    </header>
+
+    <div class="content-section">
+        
+        <div class="flex-section">
+            <div class="text-content">
+                <h2>Architecture: Decoupling Renderer and Scene</h2>
+                <p>
+                    I utilized the **Abstract Factory Pattern** (through the `CGrRenderer` base class) and the **Composite Pattern** (through the `CGrObject` Scene Graph) to define all geometric elements and their materials independently of the rendering method.
+                </p>
+                <p>
+                    The Scene Graph handled hierarchical transformations (translations, rotations), ensuring that every polygon's vertices and normals were correctly transformed into **World Space** before being submitted to the ray tracing kernel. This separation was crucial for debugging and future feature expansion.
+                </p>
+                <h3>Technical Insight: The Transformation Stack</h3>
+                <p>
+                    The `CMyRaytraceRenderer` maintained a transformation matrix stack, mirroring OpenGL's functionality. This stack was used within the `RendererEndPolygon()` method to apply the full composite transform to every vertex and normal, guaranteeing accurate intersection testing.
+                </p>
+            </div>
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="https://placehold.co/600x300/2962ff/ffffff?text=Scene+Graph+%26+Renderer+Hierarchy" alt="Diagram showing the CGrObject hierarchy feeding into the abstract CGrRenderer interface, implemented by COpenGLRenderer and CMyRaytraceRenderer.">
+                    <div class="caption">Figure 1: Architectural Diagram showing the Scene Graph abstraction layer.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-section reverse">
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="https://placehold.co/600x300/ff6d00/ffffff?text=Ray+Tracing+Output+Example" alt="Example output of the ray tracer showing basic sphere and box geometry with ambient lighting.">
+                    <div class="caption">Figure 2: Initial Ray Tracer output visualizing scene geometry.</div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h2>Core Ray Tracing Loop & Intersection</h2>
+
+                <p>
+                    The rendering process involved iterating over every pixel in the output image buffer. For each pixel, a corresponding ray was constructed originating from the camera's eye position and passing through the center of the projection plane coordinate.
+                </p>
+
+                <h3>Mathematical Challenge: Ray Calculation</h3>
+                <p>
+                    The camera geometry, defined by the Field of View (FOV) and aspect ratio, was used to calculate the world-space coordinates (`x`, `y`) for the ray's direction vector. This vector was then normalized and used to query the external `CRayIntersection` system.
+                </p>
+
+                <ol>
+                    <li>**Pixel Mapping:** Convert screen coordinates (c, r) to normalized projection plane coordinates (x, y).</li>
+                    <li>**Ray Direction:** Calculate the direction vector from the eye (0, 0, 0) to (x, y, -1).</li>
+                    <li>**Intersection Test:** Call `m_intersection.Intersect(ray, ...)` to find the closest hit point (`t`) and the object (`nearest`).</li>
+                    <li>**Color Assignment:** Assign the pixel color based on the material of the nearest object hit (or background if no intersection is found).</li>
+                </ol>
+                <p>This core loop successfully rendered geometry using only the ambient component of the assigned material properties.</p>
+            </div>
+        </div>
+
+        <h2>Result and Impact</h2>
+        <p>
+            The successful implementation of the Scene Graph and the abstract rendering architecture laid a robust, scalable foundation for future graphics projects. The clean separation of concerns means that lighting, shadow calculation, and reflection recursion can be added incrementally to the `CMyRaytraceRenderer` without altering the fundamental scene structure. This early-stage success confirmed a strong understanding of fundamental computer graphics geometry, linear algebra (matrix stack), and C++ architectural patterns.
+        </p>
+
+    </div>
+
+    <footer>
+        <div>v2.0.0<br>Last updated 2024</div>
+        <div class="footer-links">
+            <a href="https://mehtadak.github.io/resume.pdf" target="_blank">Resume ↗</a>
+            <a href="https://github.com/mehtadak" target="_blank">GitHub ↗</a>
+            <a href="https://linkedin.com/in/mehtadak" target="_blank">LinkedIn ↗</a>
+            <a href="mailto:mehtadak@msu.edu">Email ↗</a>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

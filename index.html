@@ -1,272 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K011FJJQJG"></script>
-  <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-K011FJJQJG');
-  </script>
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daksh Mehta | Portfolio</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daksh Mehta - CV</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #2C3930;
-      color: #DCD7C9;
-      line-height: 1.6;
-    }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    a {
-      color: #DCD7C9;
-      text-decoration: none;
-      transition: color 0.3s ease, background 0.3s ease;
-    }
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-primary: #111111;
+            --text-secondary: #737373;
+            --border-color: #e5e5e5;
+            --hover-bg: #f5f5f5;
+            --spacing-unit: 1.5rem;
+        }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2rem;
-      background: #2C3930;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    nav a {
-      margin: 0 1rem;
-      font-size: 0.9rem;
-      letter-spacing: 0.05rem;
-      position: relative;
-    }
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
 
-    nav a:hover {
-      color: #A27B5C;
-    }
+        a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
+        a:hover { color: #000; }
 
-    .hero {
-      height: 80vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 4rem;
-      background: #2C3930;
-    }
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
 
-    .hero h1 {
-      color: #DCD7C9;
-      font-size: 1rem;
-    }
+        header {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
 
-    .hero h2 {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #DCD7C9;
-      margin-top: 1rem;
-    }
+        .header-meta h1 { font-size: 16px; font-weight: 600; margin-bottom: 0.25rem; }
+        .header-meta p { color: var(--text-secondary); }
+        
+        /* UPDATED: Style for links in header-meta to draw focus */
+        .header-meta a { 
+            text-decoration: underline; 
+            text-underline-offset: 3px; 
+            color: var(--text-primary); /* Use primary color to stand out */
+            font-weight: 600; /* Make it bold */
+            display: block; 
+            margin-top: 0.5rem; /* Increased margin for visibility */
+            font-size: 14px;
+        }
+        .header-meta a:hover { 
+            color: var(--text-secondary); /* Changes color slightly on hover */
+        }
 
-    .hero h3 {
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: #A27B5C;
-    }
+        .header-bio p { max-width: 500px; font-size: 16px; margin-bottom: 1.5rem; }
+        .header-bio a { text-decoration: underline; text-underline-offset: 3px; color: var(--text-secondary); }
+        .header-bio a:hover { color: var(--text-primary); }
 
-    .hero p {
-      max-width: 600px;
-      margin-top: 2rem;
-      color: #DCD7C9;
-    }
+        .section-label {
+            font-size: 12px; text-transform: uppercase;
+            letter-spacing: 0.05em; color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
 
-    .btn {
-      margin-top: 2rem;
-      padding: 0.75rem 1.5rem;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      background-color: #A27B5C;
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
+        .list-container { border-top: 1px solid var(--border-color); position: relative; }
 
-    .btn:hover {
-      transform: translateY(-2px);
-    }
+        .list-header {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            padding: 1rem 0;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
 
-    section {
-      padding: 4rem 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
+        .list-item {
+            /* Default state hidden to prevent FOUC, JS will toggle */
+            display: none; 
+            grid-template-columns: 1fr 2fr;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
 
-    h2.section-title {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-      color: #DCD7C9;
-      text-align: center;
-    }
+        .list-item:hover { background-color: #fafafa; }
 
-    .swiper-container {
-      width: 100%;
-      padding-bottom: 50px;
-    }
+        .item-left { padding-right: 1rem; }
+        .item-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .item-meta { color: var(--text-secondary); font-size: 13px; }
 
-    .swiper-slide {
-      background-color: #3F4F44;
-      padding: 1.5rem;
-      border-radius: 12px;
-      width: 280px;
-      text-align: center;
-    }
+        .item-right { color: var(--text-secondary); padding-right: 2rem; }
+        .item-desc { margin-bottom: 0.5rem; }
 
-    .project img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
+        .item-tags span {
+            display: inline-block; font-size: 12px;
+            border: 1px solid var(--border-color);
+            padding: 2px 8px; border-radius: 12px;
+            margin-right: 6px; margin-top: 6px;
+        }
 
-    .project h3 {
-      color: #DCD7C9;
-      margin-bottom: 0.5rem;
-    }
+        .arrow-icon { opacity: 0; transition: opacity 0.2s, transform 0.2s; }
+        .list-item:hover .arrow-icon { opacity: 1; transform: translate(2px,-2px); }
 
-    .project p {
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-      color: #DCD7C9;
-    }
+        /* Rotation visibility classes */
+        .rotating-hidden { 
+            display: none !important; 
+            opacity: 0; 
+        }
+        
+        .rotating-visible { 
+            display: grid !important; 
+            opacity: 1; 
+            animation: fadeIn 0.4s ease forwards;
+        }
 
-    .project a {
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #fff;
-      background-color: #A27B5C;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      display: inline-block;
-      transition: background 0.3s;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .project a:hover {
-      background-color: #8d654c;
-    }
+        /* --- START FIX: Stabilize content height --- */
+        #project-list {
+            /* Sets a minimum height large enough to accommodate 3 items, preventing CLS */
+            min-height: 380px; 
+            /* Note: min-height value should be adjusted if content descriptions become significantly longer */
+        }
+        /* --- END FIX --- */
 
-    .contact {
-      text-align: center;
-    }
+        /* Rotator buttons */
+        .rotator-controls {
+            display: flex; 
+            gap: 1.5rem; /* Increased gap for visual separation */
+            justify-content: center;
+            margin-top: 2rem; /* Increased margin-top for spacing */
+        }
+        .rotator-btn {
+            background: none; /* Removed background */
+            border: none; /* Removed border */
+            color: var(--text-primary);
+            width: 30px; /* Adjusted size slightly */
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0; /* Remove default button padding */
+            font-size: 1.2rem; /* Larger arrow icon */
+            transition: color 0.2s ease, transform 0.2s ease; /* Animate color and transform */
+        }
+        .rotator-btn:hover { 
+            color: var(--text-secondary); /* Lighter on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+        .rotator-btn:active {
+            transform: translateY(0); /* Return to normal on click */
+            color: var(--text-primary);
+        }
 
-    .contact a {
-      font-size: 2rem;
-      margin: 0 1rem;
-    }
+        footer {
+            margin-top: 6rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .footer-links { display: flex; gap: 1.5rem; }
 
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #A27B5C;
-      font-size: 0.9rem;
-    }
-  </style>
+        @media (max-width: 768px) {
+            header, .list-header, .list-item, footer { grid-template-columns: 1fr; }
+            .wrapper { padding: 2rem 1.5rem; }
+            .list-header { display: none; }
+        }
+    </style>
 </head>
 
 <body>
-  <header>
-    <div><strong>Daksh Mehta</strong></div>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+<div class="wrapper">
 
-  <section class="hero">
-    <h1>Hi, my name is</h1>
-    <h2>Daksh Mehta.</h2>
-    <h3>I build things.</h3>
-    <p>I’m a computer science student at Michigan State University focused on building impactful, human-centered software and digital experiences.</p>
-    <a class="btn" href="https://mehtadak.github.io/resume.pdf" target="_blank">View Resume</a>
-  </section>
-
-  <section id="about">
-    <h2 class="section-title">About Me</h2>
-    <p>I’m currently a senior Computer Science major at Michigan State University. I enjoy developing full-stack web applications, visual tools, and systems that combine performance with thoughtful design. I'm currently seeking a Full-Time Software or Data Engineering position starting Summer 2026.</p>
-  </section>
-
-  <section id="projects">
-    <h2 class="section-title">Projects</h2>
-    <div class="swiper swiper-container">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide project">
-          <h3>Air Quality Analysis</h3>
-          <p>This algorithm extracts, analyzes and prints air quality data from India.</p>
-          <a href="https://github.com/mehtadak/India_Air_Quality_Analysis" target="_blank">View on GitHub</a>
+    <header>
+        <div class="header-meta">
+            <h1>Daksh Mehta</h1>
+            <p>Computer Science Student</p>
+            <p>East Lansing, MI</p>
+            <!-- Resume Link added here -->
+            <a href="https://mehtadak.github.io/resume.pdf" target="_blank">Resume ↗</a>
         </div>
-        <div class="swiper-slide project">
-          <h3>Extended Euclidean Algorithm</h3>
-          <p>This is an algorithm written in C++ that calculates the Bezout coefficients and the GCD (greatest common divisor) of two given integers.</p>
-          <a href="https://github.com/mehtadak/Extended-Euclidean-Algorithm" target="_blank">View on GitHub</a>
+
+        <div class="header-bio">
+            <span class="section-label">About</span>
+            <p>
+                I construct digital experiences with a focus on human-centered design and performance.
+                Currently studying Computer Science at Michigan State University.
+                Interested in Full-stack engineering and data systems.
+            </p>
+            <p style="font-size: 14px; color: var(--text-secondary);">
+                Seeking Full-time Data and/or Software Engineering roles. <br>
+                <a href="mailto:mehtadak@msu.edu">Get in touch ↗</a>
+            </p>
         </div>
-        <div class="swiper-slide project">
-          <h3>Handwritten Digit Recognizer</h3>
-          <p>A machine leanring model that recognizes handwritten numbers</p>
-          <a href="https://github.com/mehtadak/HandwrittenDigitRecognition" target="_blank">View on GitHub</a>
+    </header>
+
+    <!-- PROJECT ROTATOR --><section>
+        <div class="list-container">
+            <div class="list-header">
+                <div>Project / Year</div>
+                <div>Description</div>
+            </div>
+
+            <div id="project-list">
+                <a href = "project-promotion.html" target="_blank" class="list-item">
+                    <div class="item-left">
+                        <span class="item-title">Game Dev - Project Promotion<i class="fas fa-arrow-up-right-from-square arrow-icon"></i></span>
+                        <span class="item-meta">2025</span>
+                    </div>
+                    <div class="item-right">
+                        <p class="item-desc">Made a VFX Manager, debugged interactions system and integrated code into already existing game systems</p>
+                        <div class="item-tags"><span>Unity</span><span>C#</span><span>Game System Programming</span></div>
+                    </div>
+                </a>
+
+                <a href="raytracing.html" target = "_blank" class = "list-item">
+                    <div class="item-left">
+                        <span class="item-title">Recursive Ray Tracer<i class="fas fa-arrow-up-right-from-square arrow-icon"></i></span>
+                        <span class="item-meta">2025</span>
+                    </div>
+                    <div class="item-right">
+                        <p class="item-desc">A recursive ray tracing renderer supporting shadows, reflections, and glossy materials.</p>
+                        <div class="item-tags"><span>C++</span><span>Rendering</span><span>Graphics</span></div>
+                    </div>
+                </a>
+
+                <a href="https://github.com/mehtadak/India_Air_Quality_Analysis" target="_blank" class="list-item">
+                    <div class="item-left">
+                        <span class="item-title">Air Quality Analysis <i class="fas fa-arrow-up-right-from-square arrow-icon"></i></span>
+                        <span class="item-meta">2024</span>
+                    </div>
+                    <div class="item-right">
+                        <p class="item-desc">A data analysis pipeline visualizing pollution patterns across India.</p>
+                        <div class="item-tags"><span>Python</span><span>Pandas</span><span>Matplotlib</span></div>
+                    </div>
+                </a>
+
+                <a href="https://github.com/mehtadak/Extended-Euclidean-Algorithm" target="_blank" class="list-item">
+                    <div class="item-left">
+                        <span class="item-title">Ext. Euclidean Algo <i class="fas fa-arrow-up-right-from-square arrow-icon"></i></span>
+                        <span class="item-meta">2023</span>
+                    </div>
+                    <div class="item-right">
+                        <p class="item-desc">Optimized C++ implementation for GCD + Bezout coefficients.</p>
+                        <div class="item-tags"><span>C++</span><span>Algorithms</span><span>Math</span></div>
+                    </div>
+                </a>
+
+                <a href="https://github.com/mehtadak/HandwrittenDigitRecognition" target="_blank" class="list-item">
+                    <div class="item-left">
+                        <span class="item-title">Digit Recognizer <i class="fas fa-arrow-up-right-from-square arrow-icon"></i></span>
+                        <span class="item-meta">2023</span>
+                    </div>
+                    <div class="item-right">
+                        <p class="item-desc">Neural network (MNIST) for digit classification.</p>
+                        <div class="item-tags"><span>Python</span><span>TensorFlow</span><span>ML</span></div>
+                    </div>
+                </a>
+
+                <a class="list-item">
+                    <div class="item-left">
+                        <span class="item-title">Animal Minigame Interaction</span>
+                        <span class="item-meta">2024</span>
+                    </div>
+                    <div class="item-right">
+                        <p class="item-desc">Interaction framework switching between main gameplay and animal-based minigames.</p>
+                        <div class="item-tags"><span>Unity</span><span>C#</span><span>State Systems</span></div>
+                    </div>
+                </a>
+
+                <a class="list-item">
+                    <div class="item-left">
+                        <span class="item-title">Shader Progress Bar</span>
+                        <span class="item-meta">2024</span>
+                    </div>
+                    <div class="item-right">
+                        <p class="item-desc">A dynamic shader-driven progress bar using material properties and animated fill decay.</p>
+                        <div class="item-tags"><span>Unity</span><span>Shaders</span><span>UI</span></div>
+                    </div>
+                </a>
+
+                <a class="list-item">
+                    <div class="item-left">
+                        <span class="item-title">Bezier Pin Connection System</span>
+                        <span class="item-meta">2024</span>
+                    </div>
+                    <div class="item-right">
+                        <p class="item-desc">Node editor with draggable Bézier connections, live curvature control, and snapping pins.</p>
+                        <div class="item-tags"><span>Unity</span><span>C#</span><span>Tools</span></div>
+                    </div>
+                </a>
+
+                <a class="list-item">
+                    <div class="item-left">
+                        <span class="item-title">OpenGL Enneagonal Prism Renderer</span>
+                        <span class="item-meta">2025</span>
+                    </div>
+                    <div class="item-right">
+                        <p class="item-desc">Modern OpenGL pipeline rendering a textured 9-sided prism using custom shaders.</p>
+                        <div class="item-tags"><span>OpenGL</span><span>Shaders</span><span>C++</span></div>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- Buttons (Arrows only) --><div class="rotator-controls">
+                <button class="rotator-btn" id="prev-btn" aria-label="Previous"><i class="fas fa-arrow-left"></i></button>
+                <button class="rotator-btn" id="next-btn" aria-label="Next"><i class="fas fa-arrow-right"></i></button>
+            </div>
+            
         </div>
-      </div>
-      <div class="swiper-pagination"></div>
-    </div>
-  </section>
+    </section>
 
-  <section id="contact" class="contact">
-    <h2 class="section-title">Get In Touch</h2>
-    <p>Feel free to reach out if you’d like to collaborate or just want to say hi!</p>
-    <div>
-      <a href="mailto:mehtadak@msu.edu"><i class="fas fa-envelope"></i></a>
-      <a href="https://www.linkedin.com/in/mehtadak" target="_blank"><i class="fab fa-linkedin"></i></a>
-      <a href="https://github.com/mehtadak" target="_blank"><i class="fab fa-github"></i></a>
-      <a href="https://mehtadak.itch.io" target="_blank"><i class="fab fa-itch-io"></i></a>
-    </div>
-  </section>
+    <footer>
+        <div>v2.0.0<br>Last updated 2025</div>
+        <div class="footer-links">
+            <a href="https://mehtadak.github.io/resume.pdf" target="_blank">Resume ↗</a>
+            <a href="https://github.com/mehtadak" target="_blank">GitHub ↗</a>
+            <a href="https://linkedin.com/in/mehtadak" target="_blank">LinkedIn ↗</a>
+            <a href="mailto:mehtadak@msu.edu">Email ↗</a>
+        </div>
+    </footer>
 
-  <footer>
-    &copy; 2025 Daksh Mehta.
-  </footer>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script>
-    const swiper = new Swiper('.swiper', {
-      slidesPerView: 1,
-      spaceBetween: 30,
-      loop: true,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      breakpoints: {
-        768: {
-          slidesPerView: 2,
-        },
-        1024: {
-          slidesPerView: 3,
-        },
-      },
-    });
-  </script>
+<script>
+    const projectItems = Array.from(document.querySelectorAll('#project-list .list-item'));
+    const visibleCount = 3;
+    let index = 0;
+
+    function showProjects() {
+        projectItems.forEach(item => {
+            item.classList.remove("rotating-visible");
+            item.classList.add("rotating-hidden");
+        });
+
+        for (let i = 0; i < visibleCount; i++) {
+            const idx = (index + i) % projectItems.length;
+            const item = projectItems[idx];
+            item.classList.remove("rotating-hidden");
+            item.classList.add("rotating-visible");
+        }
+    }
+
+    function nextProjects() {
+        index = (index + visibleCount) % projectItems.length;
+        showProjects();
+    }
+
+    function prevProjects() {
+        index = (index - visibleCount + projectItems.length) % projectItems.length;
+        showProjects();
+    }
+
+    document.getElementById("next-btn").addEventListener("click", nextProjects);
+    document.getElementById("prev-btn").addEventListener("click", prevProjects);
+
+    showProjects();
+</script>
+
 </body>
-
 </html>
