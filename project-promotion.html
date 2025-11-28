@@ -1,9 +1,18 @@
 <!DOCTYPE html>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K011FJJQJG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K011FJJQJG');
+</script>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Building State System - Detail</title>
+    <title>Game Dev - Project Promotion</title>
     
     <!-- Google Fonts: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,12 +79,22 @@
             <div class="image-gallery">
                 <div class="image-container">
     <pre class="code-snippet"><code>
-// Placeholder snippet
-void TriggerDetonation() {
-    if (state == BuildingState.Condemned) {
-        state = BuildingState.Demolished;
-        SpawnDebris();
-    }
+[System.Serializable]
+public class VFXEntry
+{
+    public string key;           // Name of the vfx
+    public GameObject vfxPrefab; // Prefab of the VFX
+    public Vector3 offset; // offset in the y-direction
+}
+
+[Header("Registered VFX Assets")]  // list of vfx assets with a name to be invoked by
+[SerializeField] private List<VFXEntry> vfxAssets = new List<VFXEntry>();
+
+vfxTable = new Dictionary<string, GameObject>();
+foreach (var entry in vfxAssets)
+{
+    if (!vfxTable.ContainsKey(entry.key))
+        vfxTable.Add(entry.key, entry.vfxPrefab);
 }
     </code></pre>
                     <div class="caption">Figure 1: Building the VFX Asset Dictionary</div>
@@ -89,15 +108,24 @@ void TriggerDetonation() {
             <div class="image-gallery">
                 <div class="image-container">
                     <pre class="code-snippet"><code>
-// Placeholder snippet
-void TriggerDetonation() {
-    if (state == BuildingState.Condemned) {
-        state = BuildingState.Demolished;
-        SpawnDebris();
-    }
+protected override void doInteraction()
+{
+        base.doInteraction();
+    
+        var tilesAffected = aoePattern.GetAffectedTilesInDirection(MapManager.Instance.GetTileAtPosition(pos2), CastDirection.North);
+
+        foreach (var tile in tilesAffected)
+        {
+            CharacterData characterOnTile = TurnManager.Instance.GetUnitFromTile(tile);
+            if (characterOnTile)
+            {
+                damage = (int)Math.Round(characterOnTile.GetCurrentStats().MaxHP * 0.1);
+                characterOnTile.HP.TakeDamage(damage, currentUnit);
+            }
+        }
 }
                     </code></pre>
-                    <div class="caption">Figure 2: Example of detonator-triggered state change logic.</div>
+                    <div class="caption">Figure 2: Example of an interactable object.</div>
                 </div>
             </div>
             <div class="text-content">
@@ -107,6 +135,14 @@ void TriggerDetonation() {
                 </p>
                 <p>
                     All interactions are triggered through interact button in the action box. Game data is captured and relevant interaction script is called to perform interaction.
+                </p>
+                <h3>Integration with other systems</h3>
+                <p>
+                    All Interactables are calling multiple other systems to process the input from the player and execute the action based on the interactable.
+                </p>
+                <h3>Tools</h3>
+                <p>
+                    Took feedback from designers to expose the relevant parameters in the inspector (GUI) with helpful tooltips and headers. Designers do not need to write code or modify scripts to modify values like range and damage
                 </p>
             </div>            
         </div>
@@ -120,7 +156,7 @@ void TriggerDetonation() {
     </div>
 
     <footer>
-        <div>v1.0.0<br>Last updated 2025</div>
+        <div>Last updated 2025</div>
         <div class="footer-links">
             <a href="https://mehtadak.github.io/resume.pdf" target="_blank">Resume ↗</a>
             <a href="https://github.com/mehtadak" target="_blank">GitHub ↗</a>
