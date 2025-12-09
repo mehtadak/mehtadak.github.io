@@ -139,8 +139,12 @@ foreach (var entry in vfxAssets)
                 </div>
                 <!-- IMAGE CONTAINER REPLACED WITH CODE BLOCK -->
         <div class="image-container">
-            <img src="Renders/Bowling game scene render-min.png" alt="Diagram showing the loop of Thought, Action, and Observation in the ReAct pattern.">
-            <div class="caption">Figure 2: Spawning VFX with Scale and Lifetime Fallback</div>
+            <img src="Gifs/Electric shock.gif" alt="Diagram showing the loop of Thought, Action, and Observation in the ReAct pattern.">
+            <div class="caption">Figure 2: Spawning the Electric Cannon VFX multiple times with random scale and position</div>
+        </div>
+        <div class="image-container">
+            <img src="Gifs/Healing.gif" alt="Diagram showing the loop of Thought, Action, and Observation in the ReAct pattern.">
+            <div class="caption">Figure 3: Spawning Healing VFX with accurate position and scale</div>
         </div>
             </div>
         </div>
@@ -190,11 +194,31 @@ protected override void doInteraction()
             </div>            
         </div>
 
-        <h2>Result and Impact</h2>
+        <h2>Results and Impact</h2>
+
         <p>
-            * This modular VFX system created a clean and easy way to manage VFX that allowed players to get dynamic visual feedback on inputs. Also helped designers to quickly change assets for prototyping<br>
-            * Interactables increased player engagement by allowing them to engage with things other than enemies.
+            * The modular VFX system significantly improved the clarity and responsiveness of player feedback by providing immediate, context-aware visual responses to combat, abilities, and interactions.
         </p>
+
+        <p>
+            * By centralizing VFX handling and supporting parameterized spawning (offsets, scale, and lifetime safety), the system ensured consistent visual quality while remaining flexible enough for rapid iteration.
+            Designers were able to quickly swap, tune, and prototype visual effects without engineering intervention, accelerating development and reducing iteration 
+        </p>
+        
+        <p>
+            * The Interactable System broadened player engagement by enabling meaningful interactions with environmental objects, NPCs, and world elements beyond direct combat.
+        </p>
+
+        <p>
+            * Centralized interaction handling and clean integration with other gameplay systems allowed interactions to feel reliable and intentional, reinforcing player agency and immersion.
+            From a production perspective, the system reduced duplicated logic, simplified the addition of new interactables, and empowered designers to independently tune interaction parameters.
+        </p>
+        
+        <p>
+            * Together, these systems contributed to a more polished and scalable gameplay experience.
+            By emphasizing modular architecture, safety mechanisms, and designer friendly tooling, the project achieved faster iteration cycles, clearer gameplay feedback, and a stronger collaboration pipeline between engineering and design.
+        </p>
+        
 
     </div>
 
