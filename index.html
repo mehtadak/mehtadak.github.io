@@ -332,6 +332,7 @@
     const projectItems = Array.from(document.querySelectorAll('#project-list .list-item'));
     const visibleCount = 3;
     let index = 0;
+    const maxStartIndex = Math.max(0, projectItems.length - visibleCount);
 
     function showProjects() {
         projectItems.forEach(item => {
@@ -339,21 +340,26 @@
             item.classList.add("rotating-hidden");
         });
 
-        for (let i = 0; i < visibleCount; i++) {
-            const idx = (index + i) % projectItems.length;
-            const item = projectItems[idx];
+        for (let i = index; i < index + visibleCount && i < projectItems.length; i++) {
+            const item = projectItems[i];
             item.classList.remove("rotating-hidden");
             item.classList.add("rotating-visible");
         }
     }
 
     function nextProjects() {
-        index = (index + visibleCount) % projectItems.length;
+        index = index + visibleCount;
+        if (index >= projectItems.length) {
+            index = 0; // wrap to start after the last group (including partial)
+        }
         showProjects();
     }
 
     function prevProjects() {
-        index = (index - visibleCount + projectItems.length) % projectItems.length;
+        index = index - visibleCount;
+        if (index < 0) {
+            index = maxStartIndex; // wrap to the last full or partial group
+        }
         showProjects();
     }
 
