@@ -366,37 +366,6 @@
     document.getElementById("next-btn").addEventListener("click", nextProjects);
     document.getElementById("prev-btn").addEventListener("click", prevProjects);
 
-    // ---------- MOBILE SWIPE SUPPORT ----------
-    let startX = 0;
-    let endX = 0;
-    const swipeArea = document.getElementById("project-list");
-
-    swipeArea.addEventListener("touchstart", (e) => {
-        startX = e.touches[0].clientX;
-    });
-
-    swipeArea.addEventListener("touchmove", (e) => {
-        endX = e.touches[0].clientX;
-    });
-
-    swipeArea.addEventListener("touchend", () => {
-        const diff = endX - startX;
-
-        // Swipe threshold
-        if (Math.abs(diff) > 50) {
-            if (diff < 0) {
-                nextProjects(); // left swipe → next
-            } else {
-                prevProjects(); // right swipe → previous
-            }
-        }
-
-        // reset
-        startX = 0;
-        endX = 0;
-    });
-    // ------------------------------------------
-
     showProjects();
 </script>
 
