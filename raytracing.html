@@ -56,61 +56,67 @@
     </header>
 
     <div class="content-section">
-        
+
         <div class="flex-section">
             <div class="text-content">
-                <h2>Architecture: Decoupling Renderer and Scene</h2>
+                <h2>Renderer Architecture & System Design</h2>
                 <p>
-                    I utilized the **Abstract Factory Pattern** (through the `CGrRenderer` base class) and the **Composite Pattern** (through the `CGrObject` Scene Graph) to define all geometric elements and their materials independently of the rendering method.
+                    I designed the renderer around a strict separation between scene representation and rendering execution. Geometry, materials, and transformations were defined independently of the rendering method, allowing the same scene to be rendered through different pipelines without modification.
                 </p>
                 <p>
-                    The Scene Graph handled hierarchical transformations (translations, rotations), ensuring that every polygon's vertices and normals were correctly transformed into **World Space** before being submitted to the ray tracing kernel. This separation was crucial for debugging and future feature expansion.
+                    This architectural choice reduced coupling, simplified debugging, and ensured the system could scale beyond a single rendering technique. It also enabled rapid iteration on the ray tracing logic without destabilizing scene construction.
                 </p>
-                <h3>Technical Insight: The Transformation Stack</h3>
-                <p>
-                    The `CMyRaytraceRenderer` maintained a transformation matrix stack, mirroring OpenGL's functionality. This stack was used within the `RendererEndPolygon()` method to apply the full composite transform to every vertex and normal, guaranteeing accurate intersection testing.
-                </p>
-            </div>
-            <div class="image-gallery">
-                <div class="image-container">
-                    <img src="https://placehold.co/600x300/2962ff/ffffff?text=Scene+Graph+%26+Renderer+Hierarchy" alt="Diagram showing the CGrObject hierarchy feeding into the abstract CGrRenderer interface, implemented by COpenGLRenderer and CMyRaytraceRenderer.">
-                    <div class="caption">Figure 1: Architectural Diagram showing the Scene Graph abstraction layer.</div>
-                </div>
             </div>
         </div>
 
         <div class="flex-section reverse">
-            <div class="image-gallery">
-                <div class="image-container">
-                    <img src="https://placehold.co/600x300/ff6d00/ffffff?text=Ray+Tracing+Output+Example" alt="Example output of the ray tracer showing basic sphere and box geometry with ambient lighting.">
-                    <div class="caption">Figure 2: Initial Ray Tracer output visualizing scene geometry.</div>
-                </div>
-            </div>
             <div class="text-content">
-                <h2>Core Ray Tracing Loop & Intersection</h2>
-
+                <h2>Hierarchical Transformations & World-Space Accuracy</h2>
                 <p>
-                    The rendering process involved iterating over every pixel in the output image buffer. For each pixel, a corresponding ray was constructed originating from the camera's eye position and passing through the center of the projection plane coordinate.
+                    All objects were organized hierarchically, allowing transformations to propagate naturally through the scene. Translation and rotation logic was handled centrally to guarantee consistency across complex object groupings.
                 </p>
-
-                <h3>Mathematical Challenge: Ray Calculation</h3>
                 <p>
-                    The camera geometry, defined by the Field of View (FOV) and aspect ratio, was used to calculate the world-space coordinates (`x`, `y`) for the ray's direction vector. This vector was then normalized and used to query the external `CRayIntersection` system.
+                    A transformation stack accumulated these changes and applied the final composite transform to every vertex and normal before intersection testing. This ensured that visual placement and geometric calculations remained perfectly aligned in world space.
                 </p>
-
-                <ol>
-                    <li>**Pixel Mapping:** Convert screen coordinates (c, r) to normalized projection plane coordinates (x, y).</li>
-                    <li>**Ray Direction:** Calculate the direction vector from the eye (0, 0, 0) to (x, y, -1).</li>
-                    <li>**Intersection Test:** Call `m_intersection.Intersect(ray, ...)` to find the closest hit point (`t`) and the object (`nearest`).</li>
-                    <li>**Color Assignment:** Assign the pixel color based on the material of the nearest object hit (or background if no intersection is found).</li>
-                </ol>
-                <p>This core loop successfully rendered geometry using only the ambient component of the assigned material properties.</p>
             </div>
         </div>
 
-        <h2>Result and Impact</h2>
+        <div class="flex-section">
+            <div class="text-content">
+                <h2>Ray Construction & Camera Mathematics</h2>
+                <p>
+                    The core rendering loop was built from first principles. Each pixel was mapped to a ray originating at the camera and passing through a mathematically defined projection plane based on field of view and aspect ratio.
+                </p>
+                <ol>
+                    <li>Convert pixel coordinates into normalized projection-plane space.</li>
+                    <li>Construct and normalize the corresponding world-space ray direction.</li>
+                    <li>Query the intersection system to identify the nearest surface hit.</li>
+                    <li>Assign pixel color based on material data or background state.</li>
+                </ol>
+                <p>
+                    This approach emphasized correctness and predictability, forming a reliable base for future lighting and recursion.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex-section reverse">
+            <div class="text-content">
+                <h2>Incremental Validation Strategy</h2>
+                <p>
+                    Rather than introducing lighting complexity early, I validated the pipeline using minimal shading. This allowed me to isolate issues in ray construction, transformation accuracy, and intersection logic without visual noise.
+                </p>
+                <p>
+                    Once correctness was established, the system was prepared to support shadows, reflections, and recursive ray evaluation without architectural changes.
+                </p>
+            </div>
+        </div>
+
+        <h2>Outcome & Technical Impact</h2>
         <p>
-            The successful implementation of the Scene Graph and the abstract rendering architecture laid a robust, scalable foundation for future graphics projects. The clean separation of concerns means that lighting, shadow calculation, and reflection recursion can be added incrementally to the `CMyRaytraceRenderer` without altering the fundamental scene structure. This early-stage success confirmed a strong understanding of fundamental computer graphics geometry, linear algebra (matrix stack), and C++ architectural patterns.
+            The final result is a clean, extensible ray tracing foundation with clearly defined responsibilities and mathematically consistent behavior. The architecture supports future feature expansion while maintaining correctness and maintainability.
+        </p>
+        <p>
+            This project demonstrates a problem-solving mindset focused on decomposition, validation of fundamentals, and designing systems that scale in complexity without sacrificing clarity.
         </p>
 
     </div>
