@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K011FJJQJG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K011FJJQJG');
+</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Dev - Project Promotion</title>
+    
+    <!-- Google Fonts: JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Linked Stylesheet -->
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+
+<body>
+<div class="wrapper">
+    
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+
+    <header>
+        <div class="header-meta">
+            <h1>Enemy AI System</h1>
+            <p>Game - <a href="https://xxvoltarxx.itch.io/project-six-shooter" class="header-bio a">Project Six Shooter ↗</a> (2025)</p>
+            <div class="meta-tags">
+                <span>Unity</span>
+                <span>C#</span>
+                <span>Behavior Graphs</span>
+                <span>Navmesh Navigation</span>
+            </div>
+        </div>
+
+        <div class="header-bio">
+            <span class="section-label">Overview</span>
+            <p>
+                Made all the enemy AI move and attack using <code>behavior graphs </code>. The enemies reacted and responded to player input and introduced dynamic combat.
+            </p>
+            <p>
+                Using the <strong>Unity Navmesh</strong> system, enemies were coded to move smartly and swiftly against the player, to keep the player on their toes all the time.
+            </p>
+        </div>
+    </header>
+
+    <div class="content-section">
+        
+        <div class="flex-section">
+
+            <div class="text-content">
+                <h2>Enemy Behavior</h2>
+            
+                <p>
+                    I designed and implemented behvior graphs responsible for making the enemy AI make smart decisions triggered by combat, abilities, and in-world interactions.
+                    Instead of gameplay systems instantiating effects directly, all VFX requests are routed through this manager, ensuring consistency, maintainability, and scalability as the project grows.
+                </p>
+            
+                <p>
+                    The manager uses a <strong>Singleton</strong> pattern, allowing it to be accessed globally from any gameplay system while guaranteeing that only a single instance exists at runtime.
+                    This avoids duplicate spawns, conflicting logic, and fragmented VFX handling across the codebase.
+                </p>
+            
+                <h3>VFX Prefab Management</h3>
+            
+                <p>
+                    To decouple gameplay logic from visual assets, I implemented a dictionary-based lookup system that maps string identifiers to their corresponding VFX prefabs.
+                    Gameplay systems can request visual effects by name, without holding direct references to prefab assets.
+                </p>
+            
+                <p>
+                    This design keeps gameplay code clean and modular, simplifies iteration on visual assets, and reduces technical debt by centralizing VFX ownership within a single system.
+                </p>
+            
+                <h3>VFX Spawning, Scale & Lifetime Handling</h3>
+            
+                <p>
+                    When a visual effect is requested, the VFX Manager spawns the appropriate prefab at the provided position and rotation, and optionally applies a custom <strong>scale parameter</strong> passed in by the caller.
+                    This allows the same effect asset to be reused across different abilities, characters, or impact strengths without duplicating prefabs.
+                </p>
+            
+                <p>
+                    Each VFX is primarily responsible for managing its own lifetime, such as destroying itself once a particle system has finished playing.
+                    As a safety measure, the manager also enforces a fallback cleanup mechanism that automatically destroys any effect that exceeds a maximum lifespan, preventing unintended resource leaks.
+                </p>
+            
+                <h3>Designer Tools</h3>
+            
+                <p>
+                    To support rapid iteration and empower non-programmers, I exposed editable offset values for individual VFX assets that designers can adjust directly in the editor.
+                    This enables precise placement of visual effects relative to characters, weapons, or environmental interactions without requiring code changes.
+                </p>
+            
+                <p>
+                    Combined with runtime scale control, these tools give designers flexible control over the appearance and feel of effects while maintaining a clean and reusable asset pipeline.
+                </p>
+            
+                <h3>Why This System Matters</h3>
+            
+                <p>
+                    This VFX Manager provides a robust and extensible foundation for the game’s visual effects pipeline.
+                    By centralizing effect spawning, supporting scalable reuse through parameterization, and incorporating safety-focused lifetime management, the system improves reliability, maintainability, and cross-disciplinary collaboration.
+                </p>
+            </div>
+            
+            <!-- IMAGE CONTAINER REPLACED WITH CODE BLOCK -->
+            <div class="image-gallery">
+                <div class="image-container">
+    <pre class="code-snippet"><code>
+[System.Serializable]
+public class VFXEntry
+{
+    public string key;           // Name of the vfx
+    public GameObject vfxPrefab; // Prefab of the VFX
+    public Vector3 offset; // offset in the y-direction
+}
+
+[Header("Registered VFX Assets")]  // list of vfx assets with a name to be invoked by
+[SerializeField] private List<VFXEntry> vfxAssets = new List<VFXEntry>();
+
+vfxTable = new Dictionary<string, GameObject>();
+foreach (var entry in vfxAssets)
+{
+    if (!vfxTable.ContainsKey(entry.key))
+        vfxTable.Add(entry.key, entry.vfxPrefab);
+}
+    </code></pre>
+                    <div class="caption">Figure 1: Building the VFX Asset Dictionary</div>
+                </div>
+                <!-- IMAGE CONTAINER REPLACED WITH CODE BLOCK -->
+        <div class="image-container">
+            <img src="Gifs/Electric shock.gif" alt="Diagram showing the loop of Thought, Action, and Observation in the ReAct pattern.">
+            <div class="caption">Figure 2: Spawning the Electric Cannon VFX multiple times with random scale and position</div>
+        </div>
+        <div class="image-container">
+            <img src="Gifs/Healing.gif" alt="Diagram showing the loop of Thought, Action, and Observation in the ReAct pattern.">
+            <div class="caption">Figure 3: Spawning Healing VFX with accurate position and scale</div>
+        </div>
+            </div>
+        </div>
+
+        <div class="flex-section reverse">
+            
+            <!-- SECOND CODE BLOCK -->
+            <div class="image-gallery">
+                <div class="image-container">
+                    <pre class="code-snippet"><code>
+protected override void doInteraction()
+{
+        base.doInteraction();
+    
+        var tilesAffected = aoePattern.GetAffectedTilesInDirection(MapManager.Instance.GetTileAtPosition(pos2), CastDirection.North);
+
+        foreach (var tile in tilesAffected)
+        {
+            CharacterData characterOnTile = TurnManager.Instance.GetUnitFromTile(tile);
+            if (characterOnTile)
+            {
+                damage = (int)Math.Round(characterOnTile.GetCurrentStats().MaxHP * 0.1);
+                characterOnTile.HP.TakeDamage(damage, currentUnit);
+            }
+        }
+}
+                    </code></pre>
+                    <div class="caption">Figure 2: Example of an interactable object.</div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h2>Interactable System</h2>
+                <p>
+                    Any interaction with static objects, environments and/or sometimes players are processed here.
+                </p>
+                <p>
+                    All interactions are triggered through interact button in the action box. Game data is captured and relevant interaction script is called to perform interaction.
+                </p>
+                <h3>Integration with other systems</h3>
+                <p>
+                    All Interactables are calling multiple other systems to process the input from the player and execute the action based on the interactable.
+                </p>
+                <h3>Tools</h3>
+                <p>
+                    Took feedback from designers to expose the relevant parameters in the inspector (GUI) with helpful tooltips and headers. Designers do not need to write code or modify scripts to modify values like range and damage
+                </p>
+            </div>            
+        </div>
+
+        <h2>Results and Impact</h2>
+
+        <p>
+            * The modular VFX system significantly improved the clarity and responsiveness of player feedback by providing immediate, context-aware visual responses to combat, abilities, and interactions.
+        </p>
+
+        <p>
+            * By centralizing VFX handling and supporting parameterized spawning (offsets, scale, and lifetime safety), the system ensured consistent visual quality while remaining flexible enough for rapid iteration.
+            Designers were able to quickly swap, tune, and prototype visual effects without engineering intervention, accelerating development and reducing iteration 
+        </p>
+        
+        <p>
+            * The Interactable System broadened player engagement by enabling meaningful interactions with environmental objects, NPCs, and world elements beyond direct combat.
+        </p>
+
+        <p>
+            * Centralized interaction handling and clean integration with other gameplay systems allowed interactions to feel reliable and intentional, reinforcing player agency and immersion.
+            From a production perspective, the system reduced duplicated logic, simplified the addition of new interactables, and empowered designers to independently tune interaction parameters.
+        </p>
+        
+        <p>
+            * Together, these systems contributed to a more polished and scalable gameplay experience.
+            By emphasizing modular architecture, safety mechanisms, and designer friendly tooling, the project achieved faster iteration cycles, clearer gameplay feedback, and a stronger collaboration pipeline between engineering and design.
+        </p>
+        
+
+    </div>
+
+    <footer>
+        <div>Last updated 2025</div>
+        <div class="footer-links">
+            <a href="https://mehtadak.github.io/resume.pdf" target="_blank">Resume ↗</a>
+            <a href="https://github.com/mehtadak" target="_blank">GitHub ↗</a>
+            <a href="https://linkedin.com/in/mehtadak" target="_blank">LinkedIn ↗</a>
+            <a href="mailto:mehtadak@msu.edu">Email ↗</a>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>
