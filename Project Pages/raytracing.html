@@ -67,9 +67,18 @@
                     This architectural choice reduced coupling, simplified debugging, and ensured the system could scale beyond a single rendering technique. It also enabled rapid iteration on the ray tracing logic without destabilizing scene construction.
                 </p>
             </div>
+
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="../Pictures/without-raytracing.png">
+                    <div class="caption">
+                        Scene rendered using the base pipeline without ray tracing enabled.
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="flex-section reverse">
+        <div class="flex-section">
             <div class="text-content">
                 <h2>Hierarchical Transformations & World-Space Accuracy</h2>
                 <p>
@@ -78,6 +87,16 @@
                 <p>
                     A transformation stack accumulated these changes and applied the final composite transform to every vertex and normal before intersection testing. This ensured that visual placement and geometric calculations remained perfectly aligned in world space.
                 </p>
+            </div>
+
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="../Pictures/with-raytracing.png"
+                        alt="Renderer output with ray tracing">
+                    <div class="caption">
+                        Final render with ray tracing enabled, showing accurate lighting, reflections and shadows.
+                    </div>
+                </div>
             </div>
         </div>
 
