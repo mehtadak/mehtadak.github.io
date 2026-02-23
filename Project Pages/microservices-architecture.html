@@ -57,62 +57,89 @@
 
     <div class="content-section">
         
-        <h2>System Architecture </h2>
-        <p>The system was deployed as five separate Docker containers, communicating over a shared bridge network. This separation enforced decoupling and established clear API contracts between services.</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            <!-- User Service -->
-            <div class="service-card col-span-1">
-                <h3><i class="fas fa-user-lock mr-2 text-red-400"></i> 1. User Management</h3>
-                <p>Handles user creation, login, password hashing, and JWT generation. Critical for providing authorization checks (employee status) to all other services.</p>
-            </div>
-            
-            <!-- Product Service -->
-            <div class="service-card col-span-1">
-                <h3><i class="fas fa-box-open mr-2 text-green-400"></i> 2. Product Management</h3>
-                <p>Manages the state of all products (name, price, category). Only employees are authorized to create or modify products.</p>
+        <div class="flex-section">
+
+            <!-- LEFT: TEXT CONTENT -->
+            <div class="text-content">
+                <h2>System Architecture</h2>
+                <p>
+                    The system was deployed as five separate Docker containers, communicating over a shared bridge network.
+                    This separation enforced decoupling and established clear API contracts between services.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                    <!-- User Service -->
+                    <div class="service-card col-span-1">
+                        <h3><i class="fas fa-user-lock mr-2 text-red-400"></i> 1. User Management</h3>
+                        <p>Handles user creation, login, password hashing, and JWT generation.</p>
+                    </div>
+
+                    <!-- Product Service -->
+                    <div class="service-card col-span-1">
+                        <h3><i class="fas fa-box-open mr-2 text-green-400"></i> 2. Product Management</h3>
+                        <p>Manages product state. Only employees may modify products.</p>
+                    </div>
+
+                    <!-- Search Service -->
+                    <div class="service-card col-span-1">
+                        <h3><i class="fas fa-search mr-2 text-blue-400"></i> 3. Product Searching</h3>
+                        <p>Queries products and retrieves metadata via the Logging Service.</p>
+                    </div>
+
+                    <!-- Ordering Service -->
+                    <div class="service-card col-span-1">
+                        <h3><i class="fas fa-shopping-cart mr-2 text-yellow-400"></i> 4. Ordering</h3>
+                        <p>Processes customer orders and calculates final totals.</p>
+                    </div>
+
+                    <!-- Logging Service -->
+                    <div class="service-card col-span-1">
+                        <h3><i class="fas fa-clipboard-list mr-2 text-purple-400"></i> 5. Logging</h3>
+                        <p>Centralized sink for all successful system events.</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Search Service -->
-            <div class="service-card col-span-1">
-                <h3><i class="fas fa-search mr-2 text-blue-400"></i> 3. Product Searching</h3>
-                <p>Retrieves product details via name or category. Must query the 'Logging Service' to determine the 'last modified by' user, avoiding data redundancy.</p>
-                <p class="mt-2 text-xs"></p>
+            <!-- RIGHT: IMAGE -->
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="../Pictures/microservice-architecture-detailed.png" alt="Microservices architecture diagram">
+                    <div class="caption">
+                        High-level architecture showing five Dockerized Flask services communicating over a shared network.
+                    </div>
+                </div>
             </div>
-            
-            <!-- Ordering Service -->
-            <div class="service-card col-span-1">
-                <h3><i class="fas fa-shopping-cart mr-2 text-yellow-400"></i> 4. Ordering</h3>
-                <p>Processes customer orders (product list + quantities). Responsible for querying Product Management to fetch current prices and calculating the final total cost.</p>
-                <p class="mt-2 text-xs"></p>
-            </div>
-            
-            <!-- Logging Service -->
-            <div class="service-card col-span-1">
-                <h3><i class="fas fa-clipboard-list mr-2 text-purple-400"></i> 5. Logging</h3>
-                <p>The centralized sink for all successful system events (login, product edit, order). Employees have elevated permission to view product logs.</p>
-                <p class="mt-2 text-xs"></p>
-            </div>
+
         </div>
-
         <h2 class="mt-6">Key Implementation Challenges</h2>
 
-        <div class="text-content">
-            <h3>Inter-Service Authorization Flow</h3>
-            <p>
-                The primary technical hurdle was implementing secure communication chains. When a customer attempts to edit a product on the Product Management Service, the following internal requests are triggered:
-            </p>
-            <ol class="list-decimal list-inside ml-4 mt-2 text-sm text-gray-400 space-y-1">
-                <li>Client to Product Service: HTTP request with JWT in the header.</li>
-                <li>Product Service to User Service (Internal): Requests validation of the JWT and confirmation of employee status.</li>
-                <li>User Service: Decodes JWT, checks database for employee status, and returns boolean authorization result.</li>
-                <li>Product Service: If authorized, proceeds with the database update and sends a log POST request to the Logging Service.</li>
-            </ol>
+        <div class ="flex-section">
+            <div class="text-content">
+                <h3>Inter-Service Authorization Flow</h3>
+                <p>
+                    The primary technical hurdle was implementing secure communication chains. When a customer attempts to edit a product on the Product Management Service, the following internal requests are triggered:
+                </p>
+                <ol class="list-decimal list-inside ml-4 mt-2 text-sm text-gray-400 space-y-1">
+                    <li>Client to Product Service: HTTP request with JWT in the header.</li>
+                    <li>Product Service to User Service (Internal): Requests validation of the JWT and confirmation of employee status.</li>
+                    <li>User Service: Decodes JWT, checks database for employee status, and returns boolean authorization result.</li>
+                    <li>Product Service: If authorized, proceeds with the database update and sends a log POST request to the Logging Service.</li>
+                </ol>
 
-            <h3>Dockerization and Deployment Pipeline</h3>
-            <p class="mt-4">
-                The solution required five separate `Dockerfile` configurations (`Dockerfile.users`, etc.) built off the same Python base image. The final deployment relied on a single `compose.yaml` file to orchestrate all five containers onto a shared network, ensuring they could resolve each other by their container names (e.g., `http://user:9000/auth_check`). This setup was essential for achieving a reliable, repeatable test environment.
-            </p>
+                <h3>Dockerization and Deployment Pipeline</h3>
+                <p class="mt-4">
+                    The solution required five separate `Dockerfile` configurations (`Dockerfile.users`, etc.) built off the same Python base image. The final deployment relied on a single `compose.yaml` file to orchestrate all five containers onto a shared network, ensuring they could resolve each other by their container names (e.g., `http://user:9000/auth_check`). This setup was essential for achieving a reliable, repeatable test environment.
+                </p>
+            </div>
+
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="../Pictures/microservices-system-design.png" alt="Microservices architecture diagram">
+                    <div class="caption">
+                        High-level architecture showing five Dockerized Flask services communicating over a shared network.
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
