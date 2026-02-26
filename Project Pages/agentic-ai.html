@@ -47,7 +47,7 @@
         <div class="header-bio">
             <span class="section-label">Overview</span>
             <p>
-                This coursework involved designing and implementing an autonomous AI Agent capable of multi-step reasoning and tool-use. The primary goal was to move beyond simple prompt-response interactions by structuring the agent's internal process using established **Agentic Design Patterns** to enhance reliability and capability.
+                This coursework involved designing and implementing an autonomous AI Agent capable of multi-step reasoning and tool-use. The primary goal was to move beyond simple prompt-response interactions by structuring the agent's internal process using established Agentic Design Patterns to enhance reliability and capability.
             </p>
             <p>
                 The implemented agent was required to interact with a defined external environment and utilize a set of predefined tools to solve complex, novel problems that required dynamic planning.
@@ -61,13 +61,13 @@
             <div class="text-content">
                 <h2>Programming Deep Dive: ReAct Pattern</h2>
                 <p>
-                    The agent was constructed utilizing the **ReAct (Reasoning and Acting)** pattern. This involves forcing the Large Language Model (LLM) to interleave its **Thought (Reasoning)** process with its **Action (Tool Use)**.
+                    The agent was constructed utilizing the <u>ReAct (Reasoning and Acting)</u> pattern. This involves forcing the Large Language Model (LLM) to interleave its <u>Thought (Reasoning)</u> process with its <u>Action (Tool Use)</u>.
                 </p>
                 <p>
-                    This approach dramatically improves the agent's ability to plan and self-correct compared to simple Chain-of-Thought. The prompt structure explicitly requested the LLM to output a sequence of `Thought` and `Action(tool_call)` blocks, which were then parsed by the custom agent framework to execute the tool before feeding the observation back into the next prompt iteration. 
+                    This approach dramatically improves the agent's ability to plan and self-correct compared to simple <u>Chain-of-Thought</u>. The prompt structure explicitly requested the LLM to output a sequence of `Thought` and `Action(tool_call)` blocks, which were then parsed by the custom agent framework to execute the tool before feeding the observation back into the next prompt iteration. 
                 </p>
                 <p>
-                    The agent components implemented were: the **Planner** (the LLM itself), **Memory** (for storing conversation and past observations), and the **Tool Kit** (a collection of functions the agent could call, such as a code execution sandbox or external API query).
+                    The agent components implemented were: the Planner (the LLM itself), Memory (for storing conversation and past observations), and the Tool Kit (a collection of functions the agent could call, such as a code execution sandbox or external API query).
                 </p>
             </div>
             <div class="image-gallery">
@@ -94,11 +94,11 @@
 
                 <h3>Solution: JSON Structured Output and Guardrails</h3>
                 <p>
-                    To enforce strict tool call syntax, the prompt was heavily engineered to request a specific **JSON format** for all actions. If the LLM deviated from this JSON schema, a "Reflect" step was introduced:
+                    To enforce strict tool call syntax, the prompt was heavily engineered to request a specific JSON format for all actions. If the LLM deviated from this JSON schema, a "Reflect" step was introduced:
                 </p>
                 <ol>
                     <li>If parsing failed, the system generated an `Observation` stating the tool call was malformed.</li>
-                    <li>This observation was fed back to the LLM, prompting it to **reflect** on the error and correct the JSON structure in the subsequent turn.</li>
+                    <li>This observation was fed back to the LLM, prompting it to reflect on the error and correct the JSON structure in the subsequent turn.</li>
                 </ol>
                 <p>This closed-loop feedback mechanism significantly increased the agent's reliability, achieving over 95% successful tool execution rate in complex, multi-step problem environments.</p>
             </div>
