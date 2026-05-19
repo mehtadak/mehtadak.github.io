@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K011FJJQJG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K011FJJQJG');
+</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Dev - Revolunar</title>
+    
+    <!-- Google Fonts: JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Linked Stylesheet -->
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+
+<body>
+<div class="wrapper">
+    
+    <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+
+    <header>
+        <div class="header-meta">
+            <h1>Enemy AI System</h1>
+            <p>Game - <a href="https://xxvoltarxx.itch.io/revolunar" class="header-bio a">Revolunar</a> (2026)</p>
+            <div class="meta-tags">
+                <span>Unity</span>
+                <span>C#</span>
+                <span>Coroutines</span>
+                <span>Navmesh Navigation</span>
+            </div>
+        </div>
+
+        <div class="header-bio">
+            <span class="section-label">Overview</span>
+            <p>
+                Implemented all enemy AI across 5+ enemy types, working in close collaboration with the enemy designer to ensure each behavior matched the intended gameplay feel.
+                All enemy logic was built using <code>coroutines</code> paired with Unity's <strong>NavMesh</strong> system to produce fluid, reactive movement and combat.
+            </p>
+            <p>
+                Throughout development, I maintained regular feedback cycles with the project sponsor, <strong>Iron Galaxy</strong>, receiving guidance on code architecture, designer tooling, and debugging strategies that shaped the overall quality of the system.
+            </p>
+        </div>
+    </header>
+
+    <div class="content-section">
+        
+        <div class="flex-section">
+
+            <div class="text-content">
+                <h2>Enemy Behaviors</h2>
+            
+                <p>
+                    Each enemy was built on a shared <code>AIBehavior</code> base class, with individual types overriding and extending behavior through coroutine-driven logic.
+                    This structure kept shared systems — detection, damage, freezing — centralized, while allowing each enemy to define its own movement patterns, attack routines, and range thresholds independently.
+                </p>
+            
+                <h3>Detection & Line of Sight</h3>
+            
+                <p>
+                    Enemies use distance checks and raycasts against player and environment layer masks to determine when to engage.
+                    Rather than polling continuously, detection feeds directly into coroutine entry points — once a threshold is crossed, the appropriate behavior routine is launched and locked until it completes.
+                    This prevents state conflicts and keeps each enemy's decision loop clean and predictable.
+                </p>
+            
+                <h3>Patrol & Idle Roaming</h3>
+            
+                <p>
+                    Enemies in a non-engaged state use NavMesh-driven patrol routes to move through the environment.
+                    Waypoint selection and dwell timers are exposed as serialized fields, allowing the designer to tune patrol feel per enemy type without touching code.
+                </p>
+            
+                <h3>Ranged vs. Melee Logic</h3>
+            
+                <p>
+                    Each enemy has configurable range thresholds that determine which attack mode activates. A boolean <code>rangeFlip</code> field — added directly in response to designer feedback — inverts the range priority, letting the same enemy script support both "aggressive at close range" and "aggressive at distance" archetypes without duplicating logic.
+                </p>
+            </div>
+            
+            <div class="image-gallery">
+                <div class="image-container">
+                    <pre class="code-snippet"><code>
+if (!rangeFlip)
+{
+    if (dist <= laserBarrageRange && Time.time >= laserTimer)
+    {
+        StartCoroutine(LaserBarrage());
+        return;
+    }
+    if (dist > laserBarrageRange && Time.time >= volleyTimer)
+        StartCoroutine(ProjectileVolley());
+}
+else
+{
+    // Designer-toggled: flip which attack fires at close vs. far range
+    if (dist <= laserBarrageRange && Time.time >= volleyTimer)
+    {
+        StartCoroutine(ProjectileVolley());
+        return;
+    }
+    if (dist > laserBarrageRange && Time.time >= laserTimer)
+        StartCoroutine(LaserBarrage());
+}
+                    </code></pre>
+                    <div class="caption">Figure 1: Range-based attack selection with designer-exposed <code>rangeFlip</code> toggle</div>
+                </div>
+                <!-- <div class="image-container">
+                    <img src="../Gifs/Enemy Chase.gif" alt="Enemy chasing and engaging the player">
+                    <div class="caption">Figure 2: NavMesh-driven enemy pursuit and engagement</div>
+                </div> -->
+            </div>
+        </div>
+
+        <div class="flex-section reverse">
+            
+            <div class="image-gallery">
+                <div class="image-container">
+                    <pre class="code-snippet"><code>
+float elapsed = 0f;
+while (elapsed < laserBarrageDuration && !IsFrozen())
+{
+    elapsed += Time.deltaTime;
+
+    // Laser accelerates toward player over the attack's duration
+    float t = elapsed / laserBarrageDuration;
+    float laserRotationSpeed = Mathf.Lerp(
+        laserRotationSpeedMin, laserRotationSpeedMax, t);
+
+    laserDir = Vector3.RotateTowards(
+        laserDir, targetDir,
+        laserRotationSpeed * Mathf.Deg2Rad * Time.deltaTime, 0f);
+
+    if (Physics.Raycast(origin, laserDir, out RaycastHit hit,
+        laserMaxRange, playerAndEnvironmentMask))
+    {
+        laserLineRenderer.SetPosition(0, origin);
+        laserLineRenderer.SetPosition(1, hit.point);
+
+        if (playerMask == (playerMask | (1 << hit.collider.gameObject.layer)))
+            Player.Instance.HitEntity(laserDamagePerSecond * Time.deltaTime);
+    }
+    yield return null;
+}
+                    </code></pre>
+                    <div class="caption">Figure 3: Seraphim laser barrage — rotation speed lerps from slow to fast, rewarding early player movement</div>
+                </div>
+            </div>
+
+            <div class="text-content">
+                <h2>Attack Patterns</h2>
+                <p>
+                    Attack routines are implemented as coroutines, each managing their own timing, cooldowns, and cleanup. An <code>isActing</code> flag prevents multiple routines from overlapping mid-execution, keeping the enemy in a well-defined state at all times.
+                </p>
+                <h3>Projectile Volley</h3>
+                <p>
+                    The volley attack fires a burst of projectiles in sequence, each with randomized horizontal and vertical spread applied via quaternion rotation around the direction-to-player vector.
+                    Shot count, spread angle, speed, damage, and delay between shots are all serialized. The designer can tune the feel of every enemy's volley independently in the inspector.
+                </p>
+                <h3>Laser Barrage</h3>
+                <p>
+                    The laser uses a raycast that sweeps toward the player using <code>Vector3.RotateTowards</code>, with rotation speed lerped from a slow minimum to a fast maximum over the attack's duration.
+                    This creates a deliberately telegraphed attack — the laser starts wide and accelerates, rewarding players who move early and punishing hesitation.
+                    Damage is applied continuously as <code>damagePerSecond × deltaTime</code> whenever the ray hits the player layer.
+                </p>
+                <h3>Collaboration with Iron Galaxy</h3>
+                <p>
+                    Iron Galaxy provided feedback across several areas of the system. On architecture, they encouraged keeping shared behavior in the base class and avoiding redundant per-enemy logic. On tooling, their input directly led to changes like the <code>rangeFlip</code> toggle and consistent use of <code>[Header]</code> attributes to keep the inspector readable for the designer. They also helped debug edge cases around coroutine timing and NavMesh agent conflicts on hover-type enemies.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex-section">
+            <div class="text-content">
+                <h2>Designer Collaboration</h2>
+                <p>
+                    Throughout the project I worked closely with the enemy designer, translating intended behaviors into working implementations and iterating based on playtesting feedback.
+                    When a behavior didn't feel right in motion — an enemy that was too reactive, or an attack window that felt unfair — I'd discuss the feel with the designer and adjust exposed parameters or rework the underlying timing logic accordingly.
+                </p>
+                <h3>Inspector-Exposed Tooling</h3>
+                <p>
+                    Every meaningful value in the enemy AI is serialized and organized with <code>[Header]</code> and <code>[SerializeField]</code> attributes. Damage values, cooldowns, range thresholds, spread angles, attack durations, and movement speeds can all be adjusted directly in the Unity inspector.
+                    The designer never needed to open a script to tune how an enemy felt — that was intentional from the start.
+                </p>
+            </div>
+
+            <div class="image-gallery">
+                <div class="image-container">
+                    <pre class="code-snippet"><code>
+[Header("Projectile Volley")]
+[SerializeField] private int   volleyCount           = 3;
+[SerializeField] private float volleySpreadAngle     = 18f;
+[SerializeField] private float volleyProjectileSpeed = 12f;
+[SerializeField] private float volleyBetweenDelay    = 0.18f;
+[SerializeField] private float volleyCooldown        = 5f;
+[SerializeField] private float volleyDamage          = 8f;
+
+[Header("Laser Barrage")]
+[SerializeField] private float laserRotationSpeedMin = 10f;
+[SerializeField] private float laserRotationSpeedMax = 50f;
+[SerializeField] private float laserDamagePerSecond  = 15f;
+[SerializeField] private float laserBarrageDuration  = 3f;
+[SerializeField] private float laserCooldown         = 6f;
+
+[Header("Flip the ranges")]
+[SerializeField] private bool  rangeFlip;
+                    </code></pre>
+                    <div class="caption">Figure 4: All tunable parameters exposed in the inspector — no code changes needed for designer iteration</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Results and Impact</h2>
+
+        <p>
+            * Implemented 5+ distinct enemy types, each with unique movement patterns, attack routines, and range behaviors, all built on a shared base class that kept the codebase maintainable as scope grew.
+        </p>
+
+        <p>
+            * The coroutine-based state model eliminated conflicting behavior states and made each enemy's logic easy to read, extend, and debug — a structure Iron Galaxy specifically noted as well-organized during reviews.
+        </p>
+
+        <p>
+            * Close collaboration with the enemy designer meant behaviors matched design intent from the start, reducing costly rework late in development. The <code>rangeFlip</code> toggle and fully exposed inspector parameters let the designer iterate independently without engineering bottlenecks.
+        </p>
+
+        <p>
+            * Feedback from Iron Galaxy on architecture, tooling, and debugging sharpened the overall quality of the system and directly influenced how shared logic was structured in the base class.
+        </p>
+
+        <p>
+            * The laser barrage's accelerating sweep mechanic became one of the more memorable enemy encounters in the game — a design outcome made possible by the tight feedback loop between implementation, playtesting, and iteration.
+        </p>
+        
+    </div>
+
+    <footer>
+        <div>Last updated 2026</div>
+        <div class="footer-links">
+            <a href="https://mehtadak.github.io/resume.pdf" target="_blank">Resume ↗</a>
+            <a href="https://github.com/mehtadak" target="_blank">GitHub ↗</a>
+            <a href="https://linkedin.com/in/mehtadak" target="_blank">LinkedIn ↗</a>
+            <a href="mailto:mehtadak@msu.edu">Email ↗</a>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

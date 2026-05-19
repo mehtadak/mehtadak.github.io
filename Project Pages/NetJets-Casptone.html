@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K011FJJQJG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K011FJJQJG');
+</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Dev - NetJets VR Simulation</title>
+    
+    <!-- Google Fonts: JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Linked Stylesheet -->
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+
+<body>
+<div class="wrapper">
+    
+    <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+
+    <header>
+        <div class="header-meta">
+            <h1>Aviation Maintenance & Ground Ops Simulation</h1>
+            <p>VR Simulation - <strong>NetJets</strong> (2026)</p>
+            <div class="meta-tags">
+                <span>Unity</span>
+                <span>C#</span>
+                <span>VR / VIVE</span>
+                <span>SQLite</span>
+                <span>Backend Integration</span>
+            </div>
+        </div>
+
+        <div class="header-bio">
+            <span class="section-label">Overview</span>
+            <p>
+                A <strong>virtual reality training simulation</strong> built for NetJets, the world leader in private aviation, to reduce the cost and risk of annual crew retraining for ground handling and maintenance operations.
+                The application recreates NetJets' terminal in White Plains, NY using high-fidelity 3D models, and features three scenarios: <strong>Tire Change</strong>, <strong>Marshalling</strong>, and <strong>Wing Growth</strong>, each with a training and evaluation mode.
+            </p>
+            <p>
+                Built in <strong>Unity</strong> with <strong>SQLite</strong> as the back-end database for user login and score persistence, connected to a local server via <strong>VIVE Hub</strong>.
+                I led development of the Marshalling scenario and all shared infrastructure including the main menu, backend integration, and scoring system, receiving feedback from both our course faculty and the NetJets sponsor team.
+            </p>
+        </div>
+    </header>
+
+    <div class="content-section">
+
+        <div class="flex-section">
+
+            <div class="text-content">
+                <h2>Marshalling Scenario</h2>
+
+                <p>
+                    The Marshalling scenario is the most common ground operation event — the user guides an incoming aircraft to a designated parking spot using standard marshalling signals.
+                    I was responsible for the full implementation of this scenario, collaborating closely with a teammate on scene design and working iteratively with both the faculty sponsor and NetJets to ensure the simulation accurately reflected real-world procedures.
+                </p>
+
+                <h3>Plane Movement System</h3>
+
+                <p>
+                    I scripted the aircraft's response to marshalling signals given by the user, mapping recognized hand signals to the appropriate aircraft movement — speed changes, turns, and full stop.
+                    The plane's behavior needed to feel convincing without being forgiving, so timing and responsiveness were tuned extensively against sponsor feedback to match what a real marshaller would experience.
+                </p>
+
+                <h3>Dynamic Hazards</h3>
+
+                <p>
+                    To simulate realistic ground operation conditions, I implemented <strong>randomized ground vehicle movement</strong> and <strong>random aircraft path deviation</strong>.
+                    These introduce genuine unpredictability into each run, challenging the user to stay attentive and reflect the kinds of unexpected situations that occur during live marshalling operations.
+                </p>
+
+                <h3>TPC Briefing System</h3>
+
+                <p>
+                    I added a Threat and Error Management (TPC) briefing step that spawns UI at the start of the scenario showing how many threats the marshaller identified prior to guiding the aircraft in.
+                    This reinforces procedural compliance and mirrors the pre-operation checks required in real NetJets ground handling.
+                </p>
+            </div>
+
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="../Pictures/Marshalling.png" alt="Marshalling scenario — user guiding aircraft to parking spot">
+                    <div class="caption">Figure 1: Marshalling scenario - user guides incoming aircraft using hand signals</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-section reverse">
+
+            <div class="image-gallery">
+                <div class="image-container">
+                    <img src="../Pictures/MainMenu.png" alt="Main menu with login and leaderboards">
+                    <div class="caption">Figure 2: Main menu - user login connected to SQLite backend with scenario selection</div>
+                </div>
+            </div>
+
+            <div class="text-content">
+                <h2>Main Menu & Backend Integration</h2>
+                <p>
+                    I built the main menu from scratch and integrated it with the <strong>SQLite</strong> backend, handling user account creation, login authentication, and session management.
+                    This was one of the first systems completed on the project, providing a foundation for the rest of the team to build against.
+                </p>
+                <h3>Persistent Scoring System</h3>
+                <p>
+                    User scores needed to survive scene transitions — a common Unity pitfall. I implemented a persistent scoring system using a <code>DontDestroyOnLoad</code> manager that carries score state across scenes without data loss, then writes final results to the SQLite database on scenario completion.
+                </p>
+                <h3>Leaderboards</h3>
+                <p>
+                    I added four scrollable leaderboards to the main menu, one for each scenario, querying the backend to surface the highest-scoring users per scenario.
+                    This gave the simulation a competitive element that motivated users to improve their procedural compliance scores across training sessions.
+                </p>
+                <h3>Sponsor Feedback Integration</h3>
+                <p>
+                    Both the faculty team and the NetJets sponsor reviewed the main menu and backend systems during regular milestone reviews. Feedback from NetJets focused on ensuring login flow and score storage matched what would be needed for real deployment; this directly shaped how user records were structured in the database.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex-section">
+
+            <div class="text-content">
+                <h2>Fail States, UI Loop & Tutorialization</h2>
+                <p>
+                    I implemented all fail states in the Marshalling scenario as specified by the NetJets sponsor — covering incorrect signal sequences, missed hazard responses, and procedural violations.
+                    Each fail state triggers appropriate feedback UI and cleanly returns the user to the scenario entry point, ensuring the loop never dead-ends.
+                </p>
+                <h3>Scenario UI Flow</h3>
+                <p>
+                    I built the full UI loop connecting the Marshalling scenario back to the main menu, including results screens, score submission, and smooth scene transitions.
+                    The goal was a seamless end-to-end experience where a user could complete a full run — from login to scenario to results — without any rough edges or unclear next steps.
+                </p>
+                <h3>Training Mode & Tutorialization</h3>
+                <p>
+                    I tutorialized the entire Marshalling scenario for first-time VR users, adding contextual guiding text and UI overlays that walk the user through each step of the procedure.
+                    The training mode is designed to be self-sufficient — a user with no prior VR experience and no prior knowledge of marshalling procedures should be able to complete a full run without external instruction.
+                    Evaluation mode strips all guides and scores the user strictly against official NetJets procedure compliance.
+                </p>
+                <h3>Lighting & Environment Realism</h3>
+                <p>
+                    I implemented realistic lighting across the Marshalling scene to reinforce environmental immersion — one of the project's identified risks was building a simulation that felt too artificial to produce genuine training transfer.
+                    Lighting was iterated on throughout development and received positive feedback from the sponsor as a contributor to the overall realism of the experience.
+                </p>
+            </div>
+
+            <div class="image-gallery">
+                <!-- <div class="image-container">
+                    <img src="../Gifs/Tutorial.gif" alt="Training mode with guiding UI overlays">
+                    <div class="caption">Figure 5: Training mode — contextual UI guides the user through each marshalling step</div>
+                </div>
+                <div class="image-container">
+                    <img src="../Gifs/FailState.gif" alt="Fail state UI triggered by procedural violation">
+                    <div class="caption">Figure 6: Fail state triggered on procedural violation — user receives feedback and is returned to scenario entry</div>
+                </div> -->
+            </div>
+        </div>
+
+        <h2>Results and Impact</h2>
+
+        <p>
+            * Delivered a feature-complete Marshalling scenario — including plane movement, dynamic hazards, fail states, TPC briefing, training mode, and full UI loop — that was demonstrated live in front of the NetJets sponsor team during the beta milestone.
+        </p>
+
+        <p>
+            * The persistent scoring system and SQLite backend integration provided a reliable data layer used across all three scenarios, ensuring no score data was lost across sessions or scene transitions.
+        </p>
+
+        <p>
+            * Four scrollable leaderboards added a competitive training dynamic, giving users a clear performance benchmark and incentivizing repeated practice to improve procedural compliance scores.
+        </p>
+
+        <p>
+            * Tutorialization of the full Marshalling scenario reduced the onboarding burden for first-time VR users, making the simulation accessible to crew members regardless of their prior VR experience.
+        </p>
+
+        <p>
+            * The NetJets sponsor noted the quality and completeness of the project at beta, and the faculty team cited consistently clean, well-resolved code with bugs identified and fixed rapidly throughout development.
+        </p>
+
+    </div>
+
+    <footer>
+        <div>Last updated 2026</div>
+        <div class="footer-links">
+            <a href="https://mehtadak.github.io/resume.pdf" target="_blank">Resume ↗</a>
+            <a href="https://github.com/mehtadak" target="_blank">GitHub ↗</a>
+            <a href="https://linkedin.com/in/mehtadak" target="_blank">LinkedIn ↗</a>
+            <a href="mailto:mehtadak@msu.edu">Email ↗</a>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>
